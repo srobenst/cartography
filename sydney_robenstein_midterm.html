@@ -1,0 +1,118 @@
+<html lang=en>
+
+<head>
+<meta charset="utf-8" />
+<title>Bear Human Conflict Areas</title>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; right: 0; width: 100%; };
+    .mapboxgl-ctrl {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+        }
+
+        .legend {
+            position: fixed;
+            bottom: 43px;
+            right: 60px;
+            background-color: #ffffff;
+            padding: 7px; 
+            border-radius: 8px;
+            font-family: Cambria, Cochin, Georgia, Times;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .legend div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 15px
+        }
+
+    
+
+        .legend span {
+            margin-left: 5px;
+        }
+        .overlay-box {
+            position: fixed;
+            top:  45px;
+            right: 50px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-family: Cambria, Cochin, Georgia, Times, ;
+            font-size: 35px;
+            color: #333;
+            
+        }
+
+        .overlay-box h1 {
+            margin: 2;
+            font-size: 30px; 
+            color: #000000;
+            text-align:center
+        }
+    .overlay-box p1 {
+        font-size: 12px;
+        margin-top: 10px;
+        text-align: center;
+    }
+        #overlay-box-1 {
+          position:fixed;
+         top: 145px;
+        right: 125px;
+    }
+    #overlay-box-1 h1 {
+        font-size: 10px;
+    }
+    
+    .mapboxgl-ctrl-bottom-right {
+    position: fixed;
+    bottom: 5px; 
+    right: 10px;
+    }
+</style>
+
+</head>
+
+<body>
+<div id="map"></div>
+<div id="legend" class="legend">
+    <div>
+        <div style="width: 20px; height: 20px; background-color:#7da6a2;"></div>
+        <span>Bear Overall Range</span>
+    </div>
+    <div>
+        <div style="width: 20px; height: 20px; background-color: #b56969;"></div>
+        <span>Bear Human Conflict Areas</span>
+    </div>
+    <div id="overlay-box" class="overlay-box">
+        <h1>Bear Human Conflict Areas <br> in Colorado</h1>
+    </div>
+<div id="overlay-box-1" class="overlay-box">
+        <h1>Data Source- Colorado Parks and Wildlife</h1>
+    </div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic3JvYmVuc3QiLCJhIjoiY203dzc0dWZvMDJpdTJsb2ozZnJkcmdociJ9.xyI45b0ulCWrKE6X_qM9Tw'; 
+
+        
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/srobenst/cm8tbsm3j00wt01snbmbp0vb6',
+            center: [-105.580, 39.014], 
+            zoom: 6.5 
+        });
+    const nav = new mapboxgl.NavigationControl();
+  map.addControl(nav, 'bottom-right');
+</script>
+    </body>
+</html>
