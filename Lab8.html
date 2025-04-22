@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+<title>World City Populations Chart 2020</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<!--Load the chart libraries. Dimple is built on D3, and you need to also add D3-->
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js"></script>
+    
+<style>
+        
+    #chartContainer {width: 900px; margin: auto; margin-top: 50px; }
+    #chartContainer p {margin-right: 15px; margin-bottom: 5px; margin-top: 0; padding: 0;}
+    #charttitle {font: bold 30px Cambria; text-align: center;}
+    #chartsubhead {font: 15px Cambria; text-align-last: center;}
+        
+</style>
+</head>
+
+<body>
+
+<!--This is the div container for the chart-->
+
+<div id="chartContainer">
+    <p id="charttitle">World's Largest Urban Agglomerations 2020</p>
+    <p id="chartsubhead">Population data UN World Urbanization Prospects.</p>
+</div>
+
+
+
+<script>
+
+//The following statement loads the data from the CSV file, and then runs the function after the CSV is loaded. CityData is returned as an array containing the CSV data
+
+    // Paste here the github raw url of "CityData_WUP2018_top20.csv" data  
+      d3.csv("https://raw.githubusercontent.com/srobenst/charts/refs/heads/main/CityData_WUP2018_top20.csv", function(CityData) {
+            
+            console.log(CityData[1]);
+          
+            var svg = dimple.newSvg("#chartContainer", 1000, 700); // The chart is an svg variable assigned to the chartcontainer div. It's width and height are also assigned here
+
+            var myChart = new dimple.chart(svg, CityData);  // Create the chart with CityData as the data input
+            myChart.setBounds(50, 15, 900, 400);            // Set the chart bounds within the svg container, top-left and bottom-right coords measured from top left
+
+            myChart.defaultColors = [
+                new dimple.color("#cd2428")
+            ];
+
+            var x = myChart.addCategoryAxis("x", "CityName");  // Define the x axis. In this example it is a category axis
+            x.title = ""
+            var y = myChart.addMeasureAxis("y", "pop2020"); // Define the y axis
+            y.title = "";
+
+            var s = myChart.addSeries(null, dimple.plot.bar); // Plot a bar chart of the data
+
+            myChart.draw(500); // Draw the chart. The number is the animation delay in miliseconds
+ svg.selectAll(".dimple-axis-x .tick text")
+    .style("font-family", "Cambria")
+    .style("font-size", "14px");
+          
+  svg.selectAll(".dimple-axis-y .tick text")
+    .style("font-family", "Cambria")
+    .style("font-size", "14px");
+          
+          svg.append("text")
+  .attr("x", -190) 
+  .attr("y", 12)  
+  .attr("text-anchor", "middle")
+  .attr("transform", "rotate(-90)") 
+  .attr("font-family", "Cambria")
+  .attr("font-size", "18px")
+  .attr("font-weight", "bold")
+  .text("Population 2020 (millions)");
+          
+          svg.append("text")
+  .attr("x", 500) 
+  .attr("y", 585) 
+  .attr("text-anchor", "middle")
+  .attr("font-family", "Cambria")
+  .attr("font-size", "18px")
+  .attr("font-weight", "bold")
+  .text("City Name");   
+            svg.selectAll("path.domain").style("stroke", "#020202"); 
+            svg.selectAll("g.tick line").style("stroke", "#000000");
+
+      });
+
+
+</script>
+
+</body>
+</html>
