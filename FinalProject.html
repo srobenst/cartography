@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colorado Fish Hatcheries</title>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+ <style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #eef2f3, #dbe4e8);
+  }
+
+  header {
+    background-color: #324851;
+    color: #eee;
+    padding: 12px;
+    text-align: center;
+    font-size: 33px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+  
+
+  .banner {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-around;
+    padding: 24px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .map-frame {
+    background-color: #fff;
+    border: 6px solid #4b466d; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25); 
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 1 1 45%;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px; 
+    background-image: linear-gradient(to bottom right, #fdfdfd, #e0e0e0); 
+  }
+
+  .map-frame .map-title {
+    background-color: #446a46;
+    padding: 9px;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+    border-bottom: 2px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+
+  .map-container {
+    height: 450px;
+    border: 2px solid #ccc; 
+    border-radius: 4px;
+  }
+
+  footer {
+    background-color: #324851;
+    color: #eee;
+    text-align: center;
+    padding: 12px;
+    margin-top: 24px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .map-frame {
+      width: 100%;
+    }
+  }
+   .map-footer {
+  background-color: #eee;
+  color: #333;
+  padding: 6px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+}
+.main-description {
+  max-width: 900px;
+  background-color: #eee;
+  margin-left: 300px;
+  padding: 2px;
+  border-radius: 12px;
+  border:6px solid #4b466d;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+</style>
+
+</head>
+<body>
+
+  <header>Colorado Fish Hatcheries</header>
+
+  <div class="container">
+    <div class="map-frame">
+      <div class="map-title">Colorado Fish Hatcheries</div>
+      <div id="map1" class="map-container"></div>
+      <div class="map-footer">Data from Colorado Parks and Wildlife</div>
+    </div>
+    
+ 
+
+    <div class="map-frame">
+      <div class="map-title">Largest Stocked Reservoirs by Distance from Colorado Springs (Miles)</div>
+      <div id="map2" class="map-container"></div>
+      <div class="map-footer">Data From Colorado Parks and Wildlife</div>
+    </div>
+  </div>
+  
+     <div class="main-description">
+  <p>
+    This website was created to show the locations of fish hatcheries in Colorado, the type of fish they breed, and the five largest reservoirs that are stocked with fish from these facilities. The reservoirs are displayed based on their proximity to Colorado Springs, with their distance listed in miles.
+  </p>
+</div>
+
+  <footer>
+    Created by Sydney Robenstein for GES 3050
+  </footer>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3JvYmVuc3QiLCJhIjoiY203dzc0dWZvMDJpdTJsb2ozZnJkcmdociJ9.xyI45b0ulCWrKE6X_qM9Tw';
+
+    const map1 = new mapboxgl.Map({
+      container: 'map1',
+      style: 'mapbox://styles/srobenst/cmabcczd100hq01rf08vx92ag',
+      center: [-105.580, 39.014],
+      zoom: 5.9
+    });
+
+    const map2 = new mapboxgl.Map({
+      container: 'map2',
+      style: 'mapbox://styles/srobenst/cmabctuus00gk01rf96nh80h6',
+      center: [-105.580, 39.014],
+      zoom: 5.9
+    });
+
+    
+    map1.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
+    map2.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
+
+    function addTilesetWithHover(map, sourceId, layerId, tilesetUrl, sourceLayer) {
+      map.on('load', () => {
+        map.addSource(sourceId, {
+          type: 'vector',
+          url: tilesetUrl
+        });
+
+        map.addLayer({
+          id: layerId,
+          type: 'circle',
+          source: sourceId,
+          'source-layer': sourceLayer,
+          paint: {
+            'circle-radius': 8,
+            'circle-color': 'rgba(255, 107, 0, 0.01)',
+            'circle-stroke-width': 1,
+            'circle-stroke-color': 'rgba(255, 255, 255, 0)'
+          }
+        });
+
+        const popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false
+        });
+
+map.on('mouseenter', layerId, (e) => {
+  map.getCanvas().style.cursor = 'pointer';
+  const coordinates = e.lngLat;
+  const props = e.features[0].properties;
+  const name = props.Name || props.NAME || 'Unknown';
+  const typeFish = props.TYPE_FISH || ' ';
+  const distance = props['Distance(mi)'] || ' ';
+
+  popup.setLngLat(coordinates)
+    .setHTML(`
+      <strong>${name}</strong><br>
+      <em> </em> ${typeFish} 
+      <em> </em> ${distance} 
+    `)
+    .addTo(map);
+        });
+      
+        map.on('mouseleave', layerId, () => {
+          map.getCanvas().style.cursor = '';
+          popup.remove();
+        });
+      });
+    }
+
+    addTilesetWithHover(
+      map1,
+      'hatcheries-source',
+      'hatcheries-layer',
+      'mapbox://srobenst.7ua9pk66',
+      'ColoradoFishHatcheries-8g43if'
+    );
+
+    addTilesetWithHover(
+      map2,
+      'reservoirs-source',
+      'reservoirs-layer',
+      'mapbox://srobenst.ckq5cg1g',
+      'DistanceReservoirs-b9yudl'
+    );
+  </script>
+
+</body>
+</html>
